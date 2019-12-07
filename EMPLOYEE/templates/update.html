@@ -1,0 +1,71 @@
+<html>
+<body>
+{% include 'menu.html' %}
+<br/>
+
+{% if ok %}
+    <form action="{% url 'save_update' %}" method="post">
+        {% csrf_token %}
+   <table border="2" align="center" cellspacing="0" cellpadding="10">
+    <tr align="center">
+        <th colspan="2"> Update {{ ok.0.pk }} Marks</th>
+    </tr>
+   <tr>
+       <th>Student Id</th>
+       <td><input type="number" value="{{ ok.0.pk }}" name="sid" readonly/></td>
+   </tr>
+   <tr>
+       <th>Student Name</th>
+       <td><input type="text" name="sname" value="{{ ok.0.fields.student_name }}" min="0" max="100" readonly/></td>
+   </tr>
+   <tr>
+       <th>Telugu</th>
+       <td><input type="number"  name="tel" value="{{ ok.0.fields.telugu }}" min="0" max="100" required/></td>
+   </tr>
+      <tr>
+       <th>English</th>
+       <td><input type="number"  name="eng" value="{{ ok.0.fields.english }}" min="0" max="100" required/></td>
+   </tr>
+  <tr>
+       <th>Maths_A</th>
+       <td><input type="number"  name="maths_a" value="{{ ok.0.fields.maths_A }}" min="0" max="100" required/></td>
+  </tr>
+  <tr>
+       <th>Maths_B</th>
+       <td><input type="number"  name="maths_b" value="{{ ok.0.fields.maths_B }}" min="0" max="100" required/></td>
+  </tr>
+   <tr>
+       <th>Science</th>
+       <td><input type="number"  name="science" value="{{ ok.0.fields.science }}" min="0" max="100" required/></td>
+   </tr>
+      <tr>
+       <th>Social</th>
+       <td><input type="number"  name="social" value="{{ ok.0.fields.social }}" min="0" max="100" required/></td>
+   </tr>
+   <tr align="center">
+       <th colspan="2"><button type="submit" class="btn btn-primary">Update</button></th>
+   </tr>
+   </table>
+    </form>
+    {% else %}
+        <form action="{% url 'update_id' %}" method="get">
+            enter student id:<input type="number" name="uid" required/>
+    <button type="submit">Update</button>
+</form>
+{% endif %}
+
+{% if error %}
+
+    <h1 align="center" style="color:red;font-size: 50px">{{ error }}</h1>
+{% endif %}
+
+{% if serror %}
+
+    <h1 align="center" style="color: red;font-size: 50px">{{ serror }}</h1>
+{% endif %}
+
+{% if update %}
+    <h1 align="center" style="color: green;font-size: 50px">{{ update }}</h1>
+{% endif %}
+</body>
+</html>
