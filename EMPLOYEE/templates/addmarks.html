@@ -1,7 +1,9 @@
 <html>
 <body>
+{% if request.session.user %}
+
 {% include 'menu.html' %}
-<br/>
+<p align="right" style="color:red">welcome {{ session }}</p><br/>
 <form action="{% url 'save_marks' %}" method="post">
     {% csrf_token %}
 
@@ -54,6 +56,10 @@
 {% endif %}
 {% if serror %}
 {{ serror }}
+{% endif %}
+
+{% else %}
+    {% include 'login.html' %}
 {% endif %}
 </body>
 </html>

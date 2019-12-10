@@ -2,22 +2,22 @@ from django.shortcuts import render
 import json,requests
 
 def login(request):
-    return render(request,"login.html")
+    try:
+        value  = request.session["user"]
+        return render(request,"welcome.html",{'session':value})
+    except KeyError:
+        return render(request,"login.html")
 
 def loginCheck(request):
     id = request.POST.get("eidno")
     password =  request.POST.get("epassword")
     login_details={"eidno":id,"epassword":password}
     json_data=json.dumps(login_details)
-    print(id,password)
     try:
         res = requests.post("http://127.0.0.1:8000/elogin_check/", data=json_data)
-        #print(res.status_code)
-        print(res,res.status_code)
         if res.status_code == 200:
             js=res.json()
-            print(res)
-            print("this is js==",js)
+            request.session["user"] = id
             return render(request,"welcome.html",{"data":js})
         else:
             return render(request,"login.html",{"login_error":"please enter correct details"})
@@ -27,9 +27,13 @@ def loginCheck(request):
 def homePage(request):
     return render(request,"welcome.html")
 
-
 def enterMarks(request):
-    return render(request,"addmarks.html")
+    try:
+        value = request.session["user"]
+    except KeyError:
+        return login(request)
+    else:
+        return render(request,"addmarks.html",{"session":value})
 
 def reqMixin(request):
     sid = request.POST.get("sid")
@@ -65,14 +69,8 @@ def updateId(request):
     uid = request.GET.get("uid")
     try:
         res = requests.put("http://127.0.0.1:8000/update/"+uid+"/")
-        #res = requests.put("http://127.0.0.1:8000/update/" + uid + "/")
         if  res.status_code == 200:
             js=res.json()
-            a=js[0]["fields"]["english"]
-            b=js[0]["fields"]["social"]
-            print(a,type(a))
-            print(b,type(b))
-            #print(int(a)+int(b))
             return render(request,"update.html",{"ok":js})
         else:
             return render(request,"update.html",{"error":"enter correct student id"})
@@ -84,10 +82,14 @@ def saveUpdate(request):
     json_data = reqMixin(request)
     try:
         res = requests.post("http://127.0.0.1:8000/s_update/",data=json_data)
-        print("save marks",res.status_code)
         if  res.status_code == 200:
             return render(request,"update.html",{"update":" marks updated "})
         else:
             return render(request,"update.html",{"error":"enter correct details"})
     except requests.exceptions.ConnectionError:
         return render(request,"update.html",{"serror":"server is not available"})
+
+
+def logOut(request):
+    del request.session["user"]
+    return render(request,"login.html")

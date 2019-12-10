@@ -18,7 +18,7 @@ from django.urls import path
 from app1 import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/',views.login,name="logout"),
+    path('login/',views.login),
     path('elogin/',views.loginCheck,name="elogin"),
     path('home/',views.homePage,name="home"),
     path('enter_marks/',views.enterMarks,name="enter_marks"),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('update/',views.update,name="update"),
     path('update_id/',views.updateId,name="update_id"),
     path('save_update/',views.saveUpdate,name="save_update"),
+    path('logout/',views.logOut,name="logout")
 ]

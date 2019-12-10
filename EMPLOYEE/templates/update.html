@@ -1,7 +1,9 @@
 <html>
 <body>
+
+{% if request.session.user %}
 {% include 'menu.html' %}
-<br/>
+<p align="right" style="color:red">welcome {{ request.session.user }}</p> <br/>
 
 {% if ok %}
     <form action="{% url 'save_update' %}" method="post">
@@ -49,8 +51,10 @@
     </form>
     {% else %}
         <form action="{% url 'update_id' %}" method="get">
-            enter student id:<input type="number" name="uid" required/>
-    <button type="submit">Update</button>
+            <p align="center" style="font-size: 20px">
+                Enter Student Id:<input type="number" name="uid" required/><br/><br/>
+                <button type="submit">Update</button>
+            </p>
 </form>
 {% endif %}
 
@@ -66,6 +70,10 @@
 
 {% if update %}
     <h1 align="center" style="color: green;font-size: 50px">{{ update }}</h1>
+{% endif %}
+
+{% else %}
+    {% include 'login.html' %}
 {% endif %}
 </body>
 </html>
